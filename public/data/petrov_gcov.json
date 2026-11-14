@@ -1,0 +1,63 @@
+{
+  "scene": "G4408360790-ASF",
+  "granule": "NISAR_L2_PR_GCOV_034_026_A_023_2005_DHDH_A_20261025T235134_20261025T235209_P05036_N_F_J_001",
+  "acquired": "2026-10-25T23:51:34.000Z",
+  "status": "REVIEW",
+  "sourceSha256": "04a969741a67cdfb8fa1c71d520c2e1439f74a3bfd47f6532c2c5cc5ce014c85",
+  "dataset": "/science/LSAR/GCOV/grids/frequencyA/HHHH",
+  "epsg": 32643,
+  "pixelM": 20,
+  "seed": [
+    78.239,
+    41.9047
+  ],
+  "waterCells": 10676,
+  "areaKm2": 4.2704,
+  "sensitivityKm2": [
+    4.0924,
+    4.6096
+  ],
+  "thresholdDb": -14.125,
+  "thresholdSweepDb": 1,
+  "shoreValidFraction": 1.0,
+  "windowValidFraction": 0.9646,
+  "medianLooks": 9.13,
+  "corners": [
+    [
+      78.18818560502723,
+      41.93495009325563
+    ],
+    [
+      78.29005454097135,
+      41.93495009325563
+    ],
+    [
+      78.29005454097135,
+      41.87442494045984
+    ],
+    [
+      78.18818560502723,
+      41.87442494045984
+    ]
+  ],
+  "image": "/data/radar/petrov-gcov-water.png",
+  "imageSha256": "890f1f8f3044fe28c1cb95ceeacb5971de5d82651ca5fa2d474bbcefffeca486",
+  "geojson": "/data/petrov-water.geojson",
+  "geojsonSha256": "83d8a754790fda892b35302475acfe8a64e71a40c7511558290937d0ba8db166",
+  "sentinel2": {
+    "id": "S2C_T43TGG_20261023T053859_L2A",
+    "date": "2026-10-23T05:47:20Z",
+    "stac": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-c1-l2a/items/S2C_T43TGG_20261023T053859_L2A",
+    "assets": {
+      "green": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/43/T/GG/2026/10/S2C_T43TGG_20261023T053859_L2A/B03.tif",
+      "nir": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/43/T/GG/2026/10/S2C_T43TGG_20261023T053859_L2A/B08.tif",
+      "scl": "https://e84-earth-search-sentinel-data.s3.us-west-2.amazonaws.com/sentinel-2-c1-l2a/43/T/GG/2026/10/S2C_T43TGG_20261023T053859_L2A/SCL.tif"
+    },
+    "ndwiThreshold": 0.15,
+    "waterAreaKm2": 4.1544,
+    "intersectionCells": 9904,
+    "unionCells": 10486,
+    "iou": 0.9445,
+    "sharedRadarFraction": 0.9371
+  }
+}

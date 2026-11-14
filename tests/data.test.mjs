@@ -54,3 +54,21 @@ test("GOFF chart counts match the screening denominator and the real HDF5 artifa
   assert.equal(report.epsg, 32644);
   assert.equal(hash(read(report.image)), report.assetSha256);
 });
+
+test("Petrov extent and Sentinel comparison match the exported artifacts", () => {
+  const result = data("petrov_gcov");
+  const lake = inventory.lakes.find(({ slug }) => slug === "petrov");
+  const scene = lake.scenes.find(({ id }) => id === result.scene);
+  assert.equal(result.granule, scene.name);
+  assert.equal(result.acquired, scene.acquired);
+  assert.equal(result.status, "REVIEW");
+  assert.equal(result.areaKm2, 4.2704);
+  assert.equal(result.waterCells * result.pixelM ** 2 / 1e6, result.areaKm2);
+  assert.ok(result.sensitivityKm2[0] < result.areaKm2 && result.areaKm2 < result.sensitivityKm2[1]);
+  assert.ok(Math.abs(result.sentinel2.iou - result.sentinel2.intersectionCells / result.sentinel2.unionCells) < 0.00005);
+  assert.equal(hash(read(result.image)), result.imageSha256);
+  assert.equal(hash(read(result.geojson)), result.geojsonSha256);
+  const geometry = JSON.parse(read(result.geojson)).features[0].geometry;
+  assert.equal(geometry.type, "Polygon");
+  assert.deepEqual(geometry.coordinates[0][0], geometry.coordinates[0].at(-1));
+});

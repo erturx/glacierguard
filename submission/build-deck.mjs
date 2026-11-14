@@ -2,19 +2,21 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-const [runtimeModules, skillDir, python] = process.argv.slice(2);
+const [runtimeModules, skillDir, python, filename = "glacierguard.pptx"] = process.argv.slice(2);
 const { Presentation, PresentationFile } = await import(pathToFileURL(path.join(runtimeModules, "@oai/artifact-tool/dist/artifact_tool.mjs")));
 const { finalizePresentation } = await import(pathToFileURL(path.join(skillDir, "container_tools/artifact_tool_utils.mjs")));
 const workspaceDir = process.cwd();
-const staging = path.join(workspaceDir, ".cache", "deck");
-const output = path.join(workspaceDir, "submission", "glacierguard.pptx");
+const stagingRoot = path.join(workspaceDir, ".cache");
+await fs.mkdir(stagingRoot, { recursive: true });
+const staging = await fs.mkdtemp(path.join(stagingRoot, "deck-"));
+const output = path.join(workspaceDir, "submission", filename);
 const font = "Segoe UI";
 const deck = Presentation.create({ slideSize: { width: 1280, height: 720 } });
 const source = "https://cmr.earthdata.nasa.gov/search/";
 const gcovGuide = "https://nisar-docs.asf.alaska.edu/gcov/";
 const goffGuide = "https://nisar-docs.asf.alaska.edu/goff/";
-const assets = JSON.parse(await fs.readFile("public/data/browse.json", "utf8"));
 const quality = JSON.parse(await fs.readFile("public/data/goff_quality.json", "utf8"));
+const gcov = JSON.parse(await fs.readFile("public/data/petrov_gcov.json", "utf8"));
 
 function box(slide, text, left, top, width, height, fontSize, color, bold = false) {
   const shape = slide.shapes.add({
@@ -68,18 +70,18 @@ async function image(slide, asset, label, left, top, width, height) {
     `Source: ${source}\nPoint intersections through 14 November 2026 local time. The largest same-track, same-mode and same-release geometry group has 10 records.\nPetrov history: https://www.sciencedirect.com/science/article/pii/S0034425724004632`);
   lines(slide, [
     ["Four candidate lakes", "Merzbacher 30 · Petrov 29 · Tez-Tor 41 · Uchitel 41 retained catalog records."],
-    ["Petrov has a large proglacial basin", "Published satellite studies provide context. Two validated ASF scene previews were accessible."],
-    ["Coverage still needs a pixel-level check", "A footprint intersection shows that the catalog scene reaches the reference point."],
+    ["Petrov has a large proglacial basin", "Two validated scenes reach the lake. The calibrated HDF5 was available for the 25 October acquisition."],
+    ["The native 20 m grid resolves the basin", "Pixel validity was checked on the native grid around the candidate shoreline."],
   ]);
 }
 {
-  const slide = page("Two GCOV views of Petrov Lake",
-    `ASF LATLON PNG and KML for G4408360790-ASF and G4411720636-ASF. Source: ${gcovGuide}\nhttps://search.earthdata.nasa.gov/search/granules?p=C3622241360-ASF&g=G4408360790-ASF\nhttps://search.earthdata.nasa.gov/search/granules?p=C3622241360-ASF&g=G4411720636-ASF`);
-  await image(slide, assets[0].image, "Official GCOV browse crop over Petrov Lake, ascending", 85, 180, 510, 350);
-  await image(slide, assets[1].image, "Official GCOV browse crop over Petrov Lake, descending", 680, 180, 510, 350);
-  box(slide, "25 Oct 2026 · Track 026 ascending", 85, 545, 510, 38, 24, "#2A5146", true);
-  box(slide, "28 Oct 2026 · Track 063 descending", 680, 545, 510, 38, 24, "#2A5146", true);
-  box(slide, "Calibrated backscatter and shoreline checks are required to estimate water extent.", 85, 622, 1090, 56, 24, "#2A5146");
+  const slide = page("Petrov Lake water extent",
+    `Original HDF5: ${gcov.granule}\nDataset: ${gcov.dataset}\nDocumentation: ${gcovGuide}\nOptical comparison: ${gcov.sentinel2.stac}`);
+  await image(slide, gcov.image, "Radar-derived water mask in teal on calibrated NISAR HH backscatter", 610, 175, 585, 435);
+  box(slide, "4.27 km²", 85, 195, 490, 95, 75, "#1B6654", true);
+  box(slide, "Estimated open water · 25 October 2026 UTC", 85, 299, 490, 75, 28, "#2A5146");
+  box(slide, "4.09–4.61 km² across a ±1 dB threshold sweep", 85, 415, 475, 90, 28, "#2A5146", true);
+  box(slide, "NISAR L2 GCOV · HH · 20 m grid · Track 026", 85, 590, 490, 62, 22, "#2A5146");
 }
 {
   const slide = page("Merzbacher GOFF correlation quality",
@@ -94,9 +96,9 @@ async function image(slide, asset, label, left, top, width, height) {
 {
   const slide = page("What the current evidence supports", `Product documentation: ${gcovGuide} and ${goffGuide}.`);
   lines(slide, [
-    ["GCOV shows the radar response of the basin", "Water area and change remain unmeasured. The two browse images use different tracks."],
+    ["Sentinel-2 and NISAR water masks overlap", "Intersection over union is 94.5% in shared valid pixels. Sentinel-2 was acquired on 23 October UTC."],
     ["GOFF shows how strongly pixels matched", "Finite offsets and positive SNR support a basic screen. Glacier speed requires stronger quality controls and geometry."],
-    ["Independent validation is pending", "A future comparison needs compatible GCOV data and an optical shoreline check."],
+    ["Lake-area change requires a second measurement", "The 28 October GCOV preview uses another track. Ice and radar shadow remain sources of uncertainty."],
   ]);
 }
 {
