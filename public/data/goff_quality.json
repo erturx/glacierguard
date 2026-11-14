@@ -1,0 +1,73 @@
+{
+  "granule": "NISAR_L2_PR_GOFF_031_135_D_067_032_2000_SH_20260927T134411_20260927T134446_20261009T134412_20261009T134446_P05023_N_F_J_001",
+  "reference": "2026-09-27T13:44:11.000000000",
+  "secondary": "2026-10-09T13:44:12.000000000",
+  "lookDirection": "Left",
+  "epsg": 32644,
+  "pixelSpacingM": [
+    80.0,
+    80.0
+  ],
+  "path": "/science/LSAR/GOFF/grids/frequencyA/pixelOffsets/HH/layer3",
+  "bounds": [
+    79.81,
+    42.186,
+    79.96,
+    42.268
+  ],
+  "corners": [
+    [
+      79.81,
+      42.268
+    ],
+    [
+      79.96,
+      42.268
+    ],
+    [
+      79.96,
+      42.186
+    ],
+    [
+      79.81,
+      42.186
+    ]
+  ],
+  "hdf5Sha256": "3d66a6d81ee617f202f08ecf882cc4f11468f4458694922484992f9081f45898",
+  "cellCenters": 17622,
+  "pairedOffsets": 16459,
+  "validQuality": 16459,
+  "medianPeak": 0.708,
+  "bins": [
+    {
+      "min": 0.0,
+      "max": 0.25,
+      "count": 144,
+      "color": "#e26c69"
+    },
+    {
+      "min": 0.25,
+      "max": 0.5,
+      "count": 1898,
+      "color": "#f5b35d"
+    },
+    {
+      "min": 0.5,
+      "max": 0.75,
+      "count": 8055,
+      "color": "#6eb9c4"
+    },
+    {
+      "min": 0.75,
+      "max": 1.0,
+      "count": 6362,
+      "color": "#2b969e"
+    }
+  ],
+  "maskCodes": {
+    "11": 17194,
+    "111": 428
+  },
+  "image": "/data/radar/merzbacher-goff-quality.png",
+  "assetSha256": "bd2a3f94e9dd0252d27f12c4b800da1a72f025d8636675830ee6da237e7ca3e1"
+}

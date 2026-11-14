@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.venv/
+.cache/
+__pycache__/
+*.tsbuildinfo
+*.h5
+*.tif
+.env*
+.netrc
+_netrc
